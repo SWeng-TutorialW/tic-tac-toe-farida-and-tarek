@@ -64,7 +64,6 @@ public class PrimaryController {
 		}
 	}
 
-
 	@FXML
 	void handleExit(ActionEvent event) {
 		Platform.exit();
