@@ -144,6 +144,7 @@ public class PrimaryController {
 		}
 	}
 
+
 	private void disableAllButtons() {
 		for (Button button : buttonMap.values()) {
 			button.setDisable(true);
