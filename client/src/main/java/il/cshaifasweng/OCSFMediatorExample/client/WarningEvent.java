@@ -12,3 +12,4 @@ public class WarningEvent {
 		this.warning = warning;
 	}
 }
+
