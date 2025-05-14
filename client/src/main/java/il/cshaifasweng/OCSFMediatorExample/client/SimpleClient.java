@@ -1,33 +1,42 @@
 package il.cshaifasweng.OCSFMediatorExample.client;
 
-import org.greenrobot.eventbus.EventBus;
-
+import javafx.application.Platform;
 import il.cshaifasweng.OCSFMediatorExample.client.ocsf.AbstractClient;
-import il.cshaifasweng.OCSFMediatorExample.entities.Warning;
 
 public class SimpleClient extends AbstractClient {
-	
+
+	public static String ip = "127.0.0.1";
+	public static int port = 3000;
+
 	private static SimpleClient client = null;
+
+	private PrimaryController controller;
 
 	private SimpleClient(String host, int port) {
 		super(host, port);
 	}
 
-	@Override
-	protected void handleMessageFromServer(Object msg) {
-		if (msg.getClass().equals(Warning.class)) {
-			EventBus.getDefault().post(new WarningEvent((Warning) msg));
-		}
-		else{
-			String message = msg.toString();
-			System.out.println(message);
-		}
-	}
-	
 	public static SimpleClient getClient() {
 		if (client == null) {
-			client = new SimpleClient("localhost", 3000);
+			client = new SimpleClient(ip, port);
 		}
+		return client;
+	}
+
+	public void setController(PrimaryController controller) {
+		this.controller = controller;
+	}
+
+	@Override
+	protected void handleMessageFromServer(Object msg) {
+		Platform.runLater(() -> {
+			if (controller != null) {
+				controller.handleMessageFromServer(msg);
+			}
+		});
+	}
+	public static SimpleClient createClient(String ip, int port) {
+		client = new SimpleClient(ip, port);
 		return client;
 	}
 
